@@ -1,0 +1,9 @@
+package com.hb.paybylink.invoice;
+
+import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
+
+}
