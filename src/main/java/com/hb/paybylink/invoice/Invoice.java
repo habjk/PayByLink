@@ -53,4 +53,7 @@ public class Invoice {
         this.expiredDate = expiredDate;
     }
 
+    public Invoice() {
+    }
+
 }
