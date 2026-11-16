@@ -5,8 +5,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hb.paybylink.invoice.dto.CreateInvoiceRequest;
 import com.hb.paybylink.invoice.dto.CreateInvoiceResponse;
 
+import java.util.UUID;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class InvoiceController {
@@ -27,9 +33,20 @@ public class InvoiceController {
         invoice.setCurrency(request.getCurrency());
         invoice.setStatus(request.getStatus());
         invoice.setExpiredDate(request.getExpiredDate());
-        invoiceService.createInvoice(invoice);
+        invoice = invoiceService.createInvoice(invoice);
         return new CreateInvoiceResponse(invoice.getId().toString(), invoice.getInvoiceName(), invoice.getAmount(),
                 invoice.getPhoneNumber(), invoice.getEmail(), invoice.getNote(), invoice.getCurrency(),
                 invoice.getStatus(), invoice.getExpiredDate().toString());
+    }
+
+    @GetMapping("linkpay/get-invoice/{id}")
+    public ResponseEntity<?> getInvoiceById(@PathVariable String id) {
+        Invoice invoice = invoiceService.getInvoiceById(UUID.fromString(id));
+        if (invoice == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(new CreateInvoiceResponse(invoice.getId().toString(), invoice.getInvoiceName(),
+                invoice.getAmount(), invoice.getPhoneNumber(), invoice.getEmail(), invoice.getNote(),
+                invoice.getCurrency(), invoice.getStatus(), invoice.getExpiredDate().toString()));
     }
 }
