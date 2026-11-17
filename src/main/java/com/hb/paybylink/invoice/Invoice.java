@@ -30,7 +30,7 @@ public class Invoice {
     private LocalDateTime updatedAt;
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-    private String amount;
+    private Double amount;
     private String invoiceName;
     private String phoneNumber;
     private String email;
@@ -39,7 +39,7 @@ public class Invoice {
     private String status;
     private LocalDateTime expiredDate;
 
-    public Invoice(UUID id, String amount, String invoiceName, String phoneNumber, String email, String note,
+    public Invoice(UUID id, Double amount, String invoiceName, String phoneNumber, String email, String note,
             String currency,
             String status, LocalDateTime expiredDate) {
         this.id = id;
