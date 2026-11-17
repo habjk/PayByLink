@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class CreateInvoiceResponse {
     private String id;
-    private String amount;
+    private Double amount;
     private String invoiceName;
     private String phoneNumber;
     private String email;
@@ -16,7 +16,7 @@ public class CreateInvoiceResponse {
     private String status;
     private String expiredDate;
 
-    public CreateInvoiceResponse(String id, String amount, String invoiceName, String phoneNumber, String email,
+    public CreateInvoiceResponse(String id, Double amount, String invoiceName, String phoneNumber, String email,
             String note, String currency, String status, String expiredDate) {
         this.id = id;
         this.amount = amount;

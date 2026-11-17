@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class InvoiceController {
@@ -31,12 +30,22 @@ public class InvoiceController {
         invoice.setEmail(request.getEmail());
         invoice.setNote(request.getNote());
         invoice.setCurrency(request.getCurrency());
-        invoice.setStatus(request.getStatus());
         invoice.setExpiredDate(request.getExpiredDate());
         invoice = invoiceService.createInvoice(invoice);
-        return new CreateInvoiceResponse(invoice.getId().toString(), invoice.getInvoiceName(), invoice.getAmount(),
+        return new CreateInvoiceResponse(invoice.getId().toString(), invoice.getAmount(), invoice.getInvoiceName(),
                 invoice.getPhoneNumber(), invoice.getEmail(), invoice.getNote(), invoice.getCurrency(),
                 invoice.getStatus(), invoice.getExpiredDate().toString());
+    }
+
+    public ResponseEntity<?> updateInvoice(@PathVariable String id, @RequestBody CreateInvoiceRequest request) {
+        CreateInvoiceResponse updatedInvoice = invoiceService.updateInvoice(UUID.fromString(id),
+                new Invoice(UUID.fromString(id), request.getAmount(), request.getInvoiceName(),
+                        request.getPhoneNumber(), request.getEmail(), request.getNote(), request.getCurrency(), null,
+                        request.getExpiredDate()));
+        if (updatedInvoice == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedInvoice);
     }
 
     @GetMapping("linkpay/get-invoice/{id}")
@@ -45,8 +54,8 @@ public class InvoiceController {
         if (invoice == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(new CreateInvoiceResponse(invoice.getId().toString(), invoice.getInvoiceName(),
-                invoice.getAmount(), invoice.getPhoneNumber(), invoice.getEmail(), invoice.getNote(),
+        return ResponseEntity.ok(new CreateInvoiceResponse(invoice.getId().toString(), invoice.getAmount(),
+                invoice.getInvoiceName(), invoice.getPhoneNumber(), invoice.getEmail(), invoice.getNote(),
                 invoice.getCurrency(), invoice.getStatus(), invoice.getExpiredDate().toString()));
     }
 }
